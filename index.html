@@ -1,102 +1,104 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>TITTI Army — Admin Panel</title>
+<!-- 🔒 LOGIN BOX -->
+<div id="loginBox">
+  <h3>🔒 TITTI ADMIN ACCESS</h3>
 
-  <!-- 🎨 STYLES -->
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <input
+    type="password"
+    id="passwordInput"
+    placeholder="Enter password"
+  >
 
-  <!-- 🔒 LOGIN BOX -->
-  <div id="loginBox">
-    <h3>🔒 TITTI ADMIN ACCESS</h3>
+  <button onclick="window.checkPassword()">Login</button>
 
-    <input
-      type="password"
-      id="passwordInput"
-      placeholder="Enter password"
-    >
+  <p id="loginError"></p>
+</div>
 
-    <button onclick="window.checkPassword()">Login</button>
+<!-- 🔥 ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
 
-    <p id="loginError"></p>
-  </div>
+  <button onclick="window.logout()">🔒 Logout</button>
 
-  <!-- 🔥 ADMIN PANEL -->
-  <div id="adminPanel" style="display:none;">
+  <h2>🔥 TITTI ARMY — ADMIN PANEL</h2>
 
-    <button onclick="window.logout()">🔒 Logout</button>
+  <!-- ➕ ADD USER -->
+  <h3>➕ Add User</h3>
 
-    <h2>🔥 TITTI ARMY — ADMIN PANEL</h2>
+  <input id="newRole" placeholder="Role">
+  <input id="newName" placeholder="Name">
+  <input id="newTG" placeholder="@telegram">
+  <input id="newWallet" placeholder="Wallet">
 
-    <!-- ➕ ADD USER -->
-    <h3>➕ Add User</h3>
+  <button onclick="window.addUser()">Add</button>
 
-    <input id="newRole" placeholder="Role">
-    <input id="newName" placeholder="Name">
-    <input id="newTG" placeholder="@telegram">
-    <input id="newWallet" placeholder="Wallet">
+  <hr>
 
-    <button onclick="window.addUser()">Add</button>
+  <!-- 📥 WALLET SNAPSHOT -->
+  <h3>📥 Wallet Snapshot (CSV)</h3>
 
-    <hr>
+  <textarea
+    id="csvInput"
+    placeholder="wallet,balance&#10;0xABC...,3500"
+  ></textarea>
 
-    <!-- 📥 WALLET SNAPSHOT -->
-    <h3>📥 Wallet Snapshot (CSV)</h3>
+  <button onclick="window.applyCSV()">Apply Snapshot</button>
 
-    <textarea
-      id="csvInput"
-      placeholder="wallet,balance&#10;0xABC...,3500"
-    ></textarea>
+  <input
+    type="file"
+    id="csvFileInput"
+    accept=".csv"
+  >
 
-    <button onclick="window.applyCSV()">Apply Snapshot</button>
+  <button onclick="window.applyCSVFile()">Upload CSV</button>
 
-    <input
-      type="file"
-      id="csvFileInput"
-      accept=".csv"
-    >
+  <hr>
 
-    <button onclick="window.applyCSVFile()">Upload CSV</button>
+  <!-- 🔄 ACTIONS -->
+  <h3>🔄 Actions</h3>
 
-    <hr>
+  <button onclick="window.saveWeek()">💾 Save Week</button>
+  <button onclick="window.resetWeekly()">🔄 Reset Weekly</button>
+  <button onclick="window.clearAll()">🧨 Clear All Data</button>
 
-    <!-- 🔄 ACTIONS -->
-    <button onclick="window.saveWeek()">💾 Save Week</button>
-    <button onclick="window.resetWeekly()">🔄 Reset Weekly</button>
-    <button onclick="window.clearAll()">🧨 Clear All Data</button>
+  <hr>
 
-    <hr>
+  <!-- 📦 USER BACKUP -->
+  <h3>📦 User Backup</h3>
 
-    <!-- 📊 USER TABLE -->
-    <table id="userTable">
-      <thead>
-        <tr>
-          <th>Role</th>
-          <th>Name</th>
-          <th>Telegram</th>
-          <th>Wallet</th>
-          <th>Weekly Input</th>
-          <th>Weekly Saved</th>
-          <th>Total</th>
-          <th>Rank</th>
-          <th>Holder Tier</th>
-          <th>Multiplier</th>
-          <th>💵</th>
-          <th>❌</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <button onclick="window.exportUsers()">📤 Export Users</button>
 
-    <!-- 🏆 LEADERBOARD -->
-    <pre id="leaderboard"></pre>
-  </div>
+  <br><br>
 
-  <!-- 🧠 LOGIC -->
-  <script src="app.js" defer></script>
+  <input
+    type="file"
+    id="usersImportInput"
+    accept=".json"
+  >
 
-</body>
-</html>
+  <button onclick="window.importUsersFile()">📥 Import Users</button>
+
+  <hr>
+
+  <!-- 📊 USER TABLE -->
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Name</th>
+        <th>Telegram</th>
+        <th>Wallet</th>
+        <th>Weekly Input</th>
+        <th>Weekly Saved</th>
+        <th>Total</th>
+        <th>Rank</th>
+        <th>Holder Tier</th>
+        <th>Multiplier</th>
+        <th>💵</th>
+        <th>❌</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- 🏆 LEADERBOARD -->
+  <pre id="leaderboard"></pre>
+</div>
