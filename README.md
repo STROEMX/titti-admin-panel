@@ -27,4 +27,4 @@ Just open `index.html` in a browser.
 Password is defined in `app.js`:
 
 ```js
-const ADMIN_PASSWORD = "TITTIARMY2025";
+const ADMIN_PASSWORD = "************";
