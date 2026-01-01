@@ -4,7 +4,7 @@ body{
   font-family:monospace;
 }
 
-input,textarea{
+input, textarea{
   background:#111;
   color:#0f0;
   border:1px solid #333;
@@ -17,20 +17,24 @@ textarea{
   height:90px;
 }
 
+input[type=number]{
+  width:70px;
+}
+
+input[type=file]{
+  color:#ccc;
+}
+
 table{
   width:100%;
   border-collapse:collapse;
   margin-top:15px;
 }
 
-th,td{
+th, td{
   border:1px solid #333;
   padding:6px;
   text-align:center;
-}
-
-input[type=number]{
-  width:70px;
 }
 
 button{
@@ -89,6 +93,6 @@ pre{
 
 /* ===== GOLD PLACEHOLDER (WALLET MISSING) ===== */
 input::placeholder{
-  color:#d4af37;   /* guld */
+  color:#d4af37;
   opacity:1;
 }
