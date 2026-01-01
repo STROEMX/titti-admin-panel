@@ -1,86 +1,102 @@
-<!-- 🔒 LOGIN BOX -->
-<div id="loginBox">
-  <h3>🔒 TITTI ADMIN ACCESS</h3>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TITTI Army — Admin Panel</title>
 
-  <input
-    type="password"
-    id="passwordInput"
-    placeholder="Enter password"
-  >
+  <!-- 🎨 STYLES -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-  <button onclick="window.checkPassword()">Login</button>
+  <!-- 🔒 LOGIN BOX -->
+  <div id="loginBox">
+    <h3>🔒 TITTI ADMIN ACCESS</h3>
 
-  <p id="loginError"></p>
-</div>
+    <input
+      type="password"
+      id="passwordInput"
+      placeholder="Enter password"
+    >
 
-<!-- 🔥 ADMIN PANEL -->
-<div id="adminPanel" style="display:none;">
+    <button onclick="window.checkPassword()">Login</button>
 
-  <button onclick="window.logout()">🔒 Logout</button>
+    <p id="loginError"></p>
+  </div>
 
-  <h2>🔥 TITTI ARMY — ADMIN PANEL</h2>
+  <!-- 🔥 ADMIN PANEL -->
+  <div id="adminPanel" style="display:none;">
 
-  <!-- ➕ ADD USER -->
-  <h3>➕ Add User</h3>
+    <button onclick="window.logout()">🔒 Logout</button>
 
-  <input id="newRole" placeholder="Role">
-  <input id="newName" placeholder="Name">
-  <input id="newTG" placeholder="@telegram">
-  <input id="newWallet" placeholder="Wallet">
+    <h2>🔥 TITTI ARMY — ADMIN PANEL</h2>
 
-  <button onclick="window.addUser()">Add</button>
+    <!-- ➕ ADD USER -->
+    <h3>➕ Add User</h3>
 
-  <hr>
+    <input id="newRole" placeholder="Role">
+    <input id="newName" placeholder="Name">
+    <input id="newTG" placeholder="@telegram">
+    <input id="newWallet" placeholder="Wallet">
 
-  <!-- 📥 WALLET SNAPSHOT -->
-  <h3>📥 Wallet Snapshot (CSV)</h3>
+    <button onclick="window.addUser()">Add</button>
 
-  <textarea
-    id="csvInput"
-    placeholder="wallet,balance&#10;0xABC...,3500"
-  ></textarea>
+    <hr>
 
-  <button onclick="window.applyCSV()">Apply Snapshot</button>
+    <!-- 📥 WALLET SNAPSHOT -->
+    <h3>📥 Wallet Snapshot (CSV)</h3>
 
-  <input
-    type="file"
-    id="csvFileInput"
-    accept=".csv"
-  >
+    <textarea
+      id="csvInput"
+      placeholder="wallet,balance&#10;0xABC...,3500"
+    ></textarea>
 
-  <button onclick="window.applyCSVFile()">Upload CSV</button>
+    <button onclick="window.applyCSV()">Apply Snapshot</button>
 
-  <hr>
+    <input
+      type="file"
+      id="csvFileInput"
+      accept=".csv"
+    >
 
-  <!-- 🔄 ACTIONS -->
-  <button onclick="window.saveWeek()">💾 Save Week</button>
-  <button onclick="window.resetWeekly()">🔄 Reset Weekly</button>
-  <button onclick="window.clearAll()">🧨 Clear All Data</button>
+    <button onclick="window.applyCSVFile()">Upload CSV</button>
 
-  <hr>
+    <hr>
 
-  <!-- 📊 USER TABLE -->
-  <table id="userTable">
-    <thead>
-      <tr>
-        <th>Role</th>
-        <th>Name</th>
-        <th>Telegram</th>
-        <th>Wallet</th>
-        <th>Weekly Input</th>
-        <th>Weekly Saved</th>
-        <th>Total</th>
-        <th>Rank</th>
-        <th>Holder Tier</th>
-        <th>Multiplier</th>
-        <th>💵</th>
-        <th>❌</th>
-      </tr>
-    </thead>
+    <!-- 🔄 ACTIONS -->
+    <button onclick="window.saveWeek()">💾 Save Week</button>
+    <button onclick="window.resetWeekly()">🔄 Reset Weekly</button>
+    <button onclick="window.clearAll()">🧨 Clear All Data</button>
 
-    <tbody></tbody>
-  </table>
+    <hr>
 
-  <!-- 🏆 LEADERBOARD -->
-  <pre id="leaderboard"></pre>
-</div>
+    <!-- 📊 USER TABLE -->
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Name</th>
+          <th>Telegram</th>
+          <th>Wallet</th>
+          <th>Weekly Input</th>
+          <th>Weekly Saved</th>
+          <th>Total</th>
+          <th>Rank</th>
+          <th>Holder Tier</th>
+          <th>Multiplier</th>
+          <th>💵</th>
+          <th>❌</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <!-- 🏆 LEADERBOARD -->
+    <pre id="leaderboard"></pre>
+  </div>
+
+  <!-- 🧠 LOGIC -->
+  <script src="app.js" defer></script>
+
+</body>
+</html>
