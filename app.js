@@ -73,7 +73,12 @@ function applyHolderTier(user, balance){
   user.mult = tier.mult;
 }
 
-// ================= CSV SANITIZER (FINAL · LOCKED · CANON) =================
+// ================= BADGE (RESTORED · CANON) =================
+function badge(type, text){
+  return `<span class="badge badge-${type}">${text}</span>`;
+}
+
+// ================= CSV SANITIZER =================
 function sanitizeCSV(raw){
   const lines = raw
     .replace(/\r/g, "")
@@ -86,7 +91,6 @@ function sanitizeCSV(raw){
   const out = ["wallet,balance"];
 
   for (let i = 1; i < lines.length; i++){
-    // Tillåter: wallet,123 | wallet,1,234 | wallet,1234.56
     const match = lines[i].match(
       /^"?([^",]+)"?,\s*"?([\d,]+(\.\d+)?)"?/
     );
@@ -98,14 +102,13 @@ function sanitizeCSV(raw){
     );
 
     if (!wallet || isNaN(balance)) continue;
-
     out.push(`${wallet},${balance}`);
   }
 
   return out.join("\n");
 }
 
-// ================= CSV (TEXT) =================
+// ================= CSV APPLY =================
 function applyCSV(){
   if (!requireAuth()) return;
 
@@ -133,7 +136,6 @@ function applyCSV(){
   render();
 }
 
-// ================= CSV (FILE) =================
 function applyCSVFile(){
   if (!requireAuth()) return;
 
@@ -221,7 +223,7 @@ function rank(p){
   return "🥄 COOKIE SCOUT";
 }
 
-// ================= RENDER =================
+// ================= RENDER (FINAL · FIXED) =================
 function render(){
   if (!userTableBody) return;
   userTableBody.innerHTML = "";
@@ -229,20 +231,30 @@ function render(){
   users.sort((a,b)=>b.total-a.total);
 
   users.forEach((u,i)=>{
+
+    const walletCell = u.wallet
+      ? `<input value="${u.wallet}" onchange="users[${i}].wallet=this.value.toLowerCase();saveStorage()">`
+      : badge("warning","⚠ Wallet missing");
+
+    const payout = u.wallet
+      ? badge("gold", `💰 $${(u.weeklySaved * u.mult).toFixed(2)}`)
+      : badge("pending","⏳ Payment pending");
+
     userTableBody.innerHTML += `
 <tr>
-<td><input value="${u.role}" onchange="users[${i}].role=this.value;saveStorage()"></td>
-<td><input value="${u.name}" onchange="users[${i}].name=this.value;saveStorage()"></td>
-<td><input value="${u.tg}" onchange="users[${i}].tg=this.value;saveStorage()"></td>
-<td><input value="${u.wallet}" onchange="users[${i}].wallet=this.value.toLowerCase();saveStorage()"></td>
-<td><input type="number" value="${u.weeklyInput}"
-  onchange="users[${i}].weeklyInput=+this.value;saveStorage();render()"></td>
-<td>${u.weeklySaved}</td>
-<td>${u.total}</td>
-<td>${rank(u.total)}</td>
-<td>${u.tier}</td>
-<td>${u.mult.toFixed(2)}</td>
-<td><button onclick="removeUser(${i})">❌</button></td>
+  <td><input value="${u.role}" onchange="users[${i}].role=this.value;saveStorage()"></td>
+  <td><input value="${u.name}" onchange="users[${i}].name=this.value;saveStorage()"></td>
+  <td><input value="${u.tg}" onchange="users[${i}].tg=this.value;saveStorage()"></td>
+  <td>${walletCell}</td>
+  <td><input type="number" value="${u.weeklyInput}"
+    onchange="users[${i}].weeklyInput=+this.value;saveStorage();render()"></td>
+  <td>${u.weeklySaved}</td>
+  <td>${u.total}</td>
+  <td>${rank(u.total)}</td>
+  <td>${u.tier}</td>
+  <td>${u.mult.toFixed(2)}</td>
+  <td>${payout}</td>
+  <td><button onclick="removeUser(${i})">❌</button></td>
 </tr>`;
   });
 
