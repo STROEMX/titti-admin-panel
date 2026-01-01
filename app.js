@@ -206,6 +206,46 @@ function clearAll(){
   render();
 }
 
+// ================= EXPORT / IMPORT =================
+function exportUsers(){
+  if (!requireAuth()) return;
+
+  const data = JSON.stringify(users, null, 2);
+  const blob = new Blob([data], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "titti-users-export.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function importUsersFile(){
+  if (!requireAuth()) return;
+
+  const file = document.getElementById("usersImportInput").files[0];
+  if (!file) return alert("No file selected");
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const imported = JSON.parse(e.target.result);
+      if (!Array.isArray(imported)) {
+        return alert("Invalid file format");
+      }
+      users = imported;
+      saveStorage();
+      render();
+    } catch {
+      alert("Failed to import file");
+    }
+  };
+
+  reader.readAsText(file);
+}
+
 // ================= RANK =================
 function rank(p){
   if(p>=300) return "👑👵 ROYAL OVEN ELITE";
@@ -227,8 +267,6 @@ function render(){
   users.sort((a,b)=>b.total-a.total);
 
   users.forEach((u,i)=>{
-
-    // ✅ ENDA ÄNDRINGEN (KANONISK)
     const walletCell = `<input
       placeholder="⚠ Wallet missing"
       value="${u.wallet || ""}"
@@ -292,6 +330,8 @@ window.addUser = addUser;
 window.saveWeek = saveWeek;
 window.resetWeekly = resetWeekly;
 window.clearAll = clearAll;
+window.exportUsers = exportUsers;
+window.importUsersFile = importUsersFile;
 window.applyCSV = applyCSV;
 window.applyCSVFile = applyCSVFile;
 window.removeUser = i=>{
