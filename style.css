@@ -86,3 +86,9 @@ pre{
   border:1px solid #ffd966;
   box-shadow:0 0 6px rgba(255,204,51,.5);
 }
+
+/* ===== GOLD PLACEHOLDER (WALLET MISSING) ===== */
+input::placeholder{
+  color:#d4af37;   /* guld */
+  opacity:1;
+}
