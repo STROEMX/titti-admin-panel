@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TITTI ARMY — Admin Panel</title>
+</head>
+<body>
+
 <!-- 🔒 LOGIN BOX -->
 <div id="loginBox">
   <h3>🔒 TITTI ADMIN ACCESS</h3>
@@ -8,7 +16,8 @@
     placeholder="Enter password"
   >
 
-  <button onclick="checkPassword()">Login</button>
+  <!-- ✅ FIX 1: type="button" -->
+  <button type="button" onclick="checkPassword()">Login</button>
 
   <p id="loginError"></p>
 </div>
@@ -16,7 +25,7 @@
 <!-- 🔥 ADMIN PANEL -->
 <div id="adminPanel" style="display:none;">
 
-  <button onclick="window.logout()">🔒 Logout</button>
+  <button type="button" onclick="window.logout()">🔒 Logout</button>
 
   <h2>🔥 TITTI ARMY — ADMIN PANEL</h2>
 
@@ -28,7 +37,7 @@
   <input id="newTG" placeholder="@telegram">
   <input id="newWallet" placeholder="Wallet">
 
-  <button onclick="window.addUser()">Add</button>
+  <button type="button" onclick="window.addUser()">Add</button>
 
   <hr>
 
@@ -40,7 +49,7 @@
     placeholder="wallet,balance&#10;0xABC...,3500"
   ></textarea>
 
-  <button onclick="window.applyCSV()">Apply Snapshot</button>
+  <button type="button" onclick="window.applyCSV()">Apply Snapshot</button>
 
   <input
     type="file"
@@ -48,23 +57,23 @@
     accept=".csv"
   >
 
-  <button onclick="window.applyCSVFile()">Upload CSV</button>
+  <button type="button" onclick="window.applyCSVFile()">Upload CSV</button>
 
   <hr>
 
   <!-- 🔄 ACTIONS -->
   <h3>🔄 Actions</h3>
 
-  <button onclick="window.saveWeek()">💾 Save Week</button>
-  <button onclick="window.resetWeekly()">🔄 Reset Weekly</button>
-  <button onclick="window.clearAll()">🧨 Clear All Data</button>
+  <button type="button" onclick="window.saveWeek()">💾 Save Week</button>
+  <button type="button" onclick="window.resetWeekly()">🔄 Reset Weekly</button>
+  <button type="button" onclick="window.clearAll()">🧨 Clear All Data</button>
 
   <hr>
 
   <!-- 📦 USER BACKUP -->
   <h3>📦 User Backup</h3>
 
-  <button onclick="window.exportUsers()">📤 Export Users</button>
+  <button type="button" onclick="window.exportUsers()">📤 Export Users</button>
 
   <br><br>
 
@@ -74,7 +83,7 @@
     accept=".json"
   >
 
-  <button onclick="window.importUsersFile()">📥 Import Users</button>
+  <button type="button" onclick="window.importUsersFile()">📥 Import Users</button>
 
   <hr>
 
@@ -102,3 +111,9 @@
   <!-- 🏆 LEADERBOARD -->
   <pre id="leaderboard"></pre>
 </div>
+
+<!-- ✅ FIX 2: SCRIPT MÅSTE LADDAS -->
+<script src="app.js"></script>
+
+</body>
+</html>
