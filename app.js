@@ -73,7 +73,7 @@ function applyHolderTier(user, balance){
   user.mult = tier.mult;
 }
 
-// ================= BADGE (RESTORED · CANON) =================
+// ================= BADGE =================
 function badge(type, text){
   return `<span class="badge badge-${type}">${text}</span>`;
 }
@@ -91,15 +91,11 @@ function sanitizeCSV(raw){
   const out = ["wallet,balance"];
 
   for (let i = 1; i < lines.length; i++){
-    const match = lines[i].match(
-      /^"?([^",]+)"?,\s*"?([\d,]+(\.\d+)?)"?/
-    );
+    const match = lines[i].match(/^"?([^",]+)"?,\s*"?([\d,]+(\.\d+)?)"?/);
     if (!match) continue;
 
     const wallet = match[1].toLowerCase().trim();
-    const balance = Math.floor(
-      Number(match[2].replace(/,/g, ""))
-    );
+    const balance = Math.floor(Number(match[2].replace(/,/g, "")));
 
     if (!wallet || isNaN(balance)) continue;
     out.push(`${wallet},${balance}`);
@@ -223,7 +219,7 @@ function rank(p){
   return "🥄 COOKIE SCOUT";
 }
 
-// ================= RENDER (FINAL · FIXED) =================
+// ================= RENDER =================
 function render(){
   if (!userTableBody) return;
   userTableBody.innerHTML = "";
@@ -232,9 +228,12 @@ function render(){
 
   users.forEach((u,i)=>{
 
-    const walletCell = u.wallet
-      ? `<input value="${u.wallet}" onchange="users[${i}].wallet=this.value.toLowerCase();saveStorage()">`
-      : badge("warning","⚠ Wallet missing");
+    // ✅ ENDA ÄNDRINGEN (KANONISK)
+    const walletCell = `<input
+      placeholder="⚠ Wallet missing"
+      value="${u.wallet || ""}"
+      onchange="users[${i}].wallet=this.value.toLowerCase();saveStorage();render()"
+    >`;
 
     const payout = u.wallet
       ? badge("gold", `💰 $${(u.weeklySaved * u.mult).toFixed(2)}`)
