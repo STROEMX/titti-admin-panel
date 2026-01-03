@@ -233,20 +233,15 @@ function resetWeekly(){
   render();
 }
 
-// ✅ NEW: RESET ONLY PAID WEEKLIES
+// ✅ RESET ONLY PAID WEEKLIES
 function resetPaidWeeklyOnly(){
   if (!requireAuth()) return;
 
-  const confirmed = confirm(
-    "Reset weekly saved ONLY for users with payout ≥ $5?"
-  );
-  if (!confirmed) return;
+  if (!confirm("Reset weekly saved ONLY for users with payout ≥ $5?")) return;
 
-  users.forEach(u => {
+  users.forEach(u=>{
     if (!u.wallet) return;
-
-    const payout = u.weeklySaved * u.mult;
-    if (payout >= MIN_PAYOUT) {
+    if (u.weeklySaved * u.mult >= MIN_PAYOUT){
       u.weeklySaved = 0;
     }
   });
@@ -268,8 +263,7 @@ function clearAll(){
 function exportUsers(){
   if (!requireAuth()) return;
 
-  const data = JSON.stringify(users, null, 2);
-  const blob = new Blob([data], { type: "application/json" });
+  const blob = new Blob([JSON.stringify(users,null,2)], { type:"application/json" });
   const url = URL.createObjectURL(blob);
 
   const a = document.createElement("a");
@@ -287,18 +281,13 @@ function importUsersFile(){
   if (!file) return alert("No file selected");
 
   const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) return alert("Invalid file format");
-      users = imported;
-      saveStorage();
-      render();
-    } catch {
-      alert("Failed to import file");
-    }
+  reader.onload = e=>{
+    const imported = JSON.parse(e.target.result);
+    if (!Array.isArray(imported)) return alert("Invalid file");
+    users = imported;
+    saveStorage();
+    render();
   };
-
   reader.readAsText(file);
 }
 
@@ -348,6 +337,17 @@ function render(){
   users.sort((a,b)=>b.total-a.total);
 
   users.forEach((u,i)=>{
+    const payoutValue = u.weeklySaved * u.mult;
+
+    let payoutClass = "";
+    if (!u.wallet){
+      payoutClass = "payout-missing";
+    } else if (payoutValue >= MIN_PAYOUT){
+      payoutClass = "payout-eligible";
+    } else {
+      payoutClass = "payout-below";
+    }
+
     const walletCell = `<input
       placeholder="⚠ Wallet missing"
       value="${u.wallet || ""}"
@@ -355,11 +355,11 @@ function render(){
     >`;
 
     const payout = u.wallet
-      ? badge("gold", `💰 $${(u.weeklySaved * u.mult).toFixed(2)}`)
+      ? badge("gold", `💰 $${payoutValue.toFixed(2)}`)
       : badge("pending","⏳ Payment pending");
 
     userTableBody.innerHTML += `
-<tr>
+<tr class="${payoutClass}">
   <td><input value="${u.role}" onchange="users[${i}].role=this.value;saveStorage()"></td>
   <td><input value="${u.name}" onchange="users[${i}].name=this.value;saveStorage()"></td>
   <td><input value="${u.tg}" onchange="users[${i}].tg=this.value;saveStorage()"></td>
@@ -378,14 +378,14 @@ function render(){
 
   leaderboard();
 
-  const summary = calculateNextPayoutSummary();
-  const payoutEl = document.getElementById("payoutSummary");
-  if (payoutEl){
-    payoutEl.innerHTML = `
-      💰 Total: $${summary.total.toFixed(2)}
-      | 👥 Eligible: ${summary.eligibleCount}
-      | 🚫 No Wallet: ${summary.skippedNoWallet}
-      | ⛔ < $5: ${summary.skippedMin}
+  const s = calculateNextPayoutSummary();
+  const el = document.getElementById("payoutSummary");
+  if (el){
+    el.innerHTML = `
+      💰 Total: $${s.total.toFixed(2)}
+      | 👥 Eligible: ${s.eligibleCount}
+      | 🚫 No Wallet: ${s.skippedNoWallet}
+      | ⛔ < $5: ${s.skippedMin}
     `;
   }
 }
