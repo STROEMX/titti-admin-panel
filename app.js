@@ -259,6 +259,37 @@ function rank(p){
   return "🥄 COOKIE SCOUT";
 }
 
+// ================= LEADERBOARD =================
+function leaderboard(){
+  if (!leaderboardEl) return;
+
+  const sorted = [...users].filter(u=>u.total>0).sort((a,b)=>b.total-a.total);
+  const groups = {};
+
+  sorted.forEach(u=>{
+    const r = rank(u.total);
+    if(!groups[r]) groups[r]=[];
+    groups[r].push(u);
+  });
+
+  let out = "🔥 TITTI ARMY — LEADERBOARD\n\n";
+  Object.keys(groups).forEach(r=>{
+    out += `${r}\n`;
+    groups[r].forEach(u=>{
+      if(u.tg) out += `${u.tg} — ${u.total}\n`;
+    });
+    out += "\n";
+  });
+
+  leaderboardEl.textContent = out.trim();
+}
+
+// ================= 🔒 SAFETY HOOK =================
+function forceLeaderboardRefresh(){
+  if (!leaderboardEl) return;
+  leaderboard();
+}
+
 // ================= RENDER =================
 function render(){
   if (!userTableBody) return;
@@ -298,31 +329,6 @@ function render(){
   leaderboard();
 }
 
-// ================= LEADERBOARD =================
-function leaderboard(){
-  if (!leaderboardEl) return;
-
-  const sorted = [...users].filter(u=>u.total>0).sort((a,b)=>b.total-a.total);
-  const groups = {};
-
-  sorted.forEach(u=>{
-    const r = rank(u.total);
-    if(!groups[r]) groups[r]=[];
-    groups[r].push(u);
-  });
-
-  let out = "🔥 TITTI ARMY — LEADERBOARD\n\n";
-  Object.keys(groups).forEach(r=>{
-    out += `${r}\n`;
-    groups[r].forEach(u=>{
-      if(u.tg) out += `${u.tg} — ${u.total}\n`;
-    });
-    out += "\n";
-  });
-
-  leaderboardEl.textContent = out.trim();
-}
-
 // ================= EXPOSE =================
 window.checkPassword = checkPassword;
 window.logout = logout;
@@ -355,4 +361,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.getElementById("adminPanel").style.display="block";
     render();
   }
+
+  // ✅ exakt återställning av gammalt leaderboard-beteende
+  forceLeaderboardRefresh();
 });
