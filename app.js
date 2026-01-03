@@ -233,6 +233,28 @@ function resetWeekly(){
   render();
 }
 
+// ✅ NEW: RESET ONLY PAID WEEKLIES
+function resetPaidWeeklyOnly(){
+  if (!requireAuth()) return;
+
+  const confirmed = confirm(
+    "Reset weekly saved ONLY for users with payout ≥ $5?"
+  );
+  if (!confirmed) return;
+
+  users.forEach(u => {
+    if (!u.wallet) return;
+
+    const payout = u.weeklySaved * u.mult;
+    if (payout >= MIN_PAYOUT) {
+      u.weeklySaved = 0;
+    }
+  });
+
+  saveStorage();
+  render();
+}
+
 function clearAll(){
   if (!requireAuth()) return;
   if (!confirm("🧨 DELETE ALL DATA?")) return;
@@ -374,6 +396,7 @@ window.logout = logout;
 window.addUser = addUser;
 window.saveWeek = saveWeek;
 window.resetWeekly = resetWeekly;
+window.resetPaidWeeklyOnly = resetPaidWeeklyOnly;
 window.clearAll = clearAll;
 window.exportUsers = exportUsers;
 window.importUsersFile = importUsersFile;
