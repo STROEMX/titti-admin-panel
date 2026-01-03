@@ -78,6 +78,40 @@ function badge(type, text){
   return `<span class="badge badge-${type}">${text}</span>`;
 }
 
+// ================= NEXT PAYOUT (DERIVED STATE) =================
+const MIN_PAYOUT = 5;
+
+function calculateNextPayoutSummary(){
+  let total = 0;
+  let eligibleCount = 0;
+  let skippedNoWallet = 0;
+  let skippedMin = 0;
+
+  users.forEach(u=>{
+    if (!u.wallet){
+      skippedNoWallet++;
+      return;
+    }
+
+    const payout = u.weeklySaved * u.mult;
+
+    if (payout < MIN_PAYOUT){
+      skippedMin++;
+      return;
+    }
+
+    eligibleCount++;
+    total += payout;
+  });
+
+  return {
+    total,
+    eligibleCount,
+    skippedNoWallet,
+    skippedMin
+  };
+}
+
 // ================= CSV SANITIZER =================
 function sanitizeCSV(raw){
   const lines = raw
@@ -123,7 +157,9 @@ function applyCSV(){
 
   users.forEach(u=>{
     if(!u.wallet){
-      u.tier="-"; u.mult=0; return;
+      u.tier="-"; 
+      u.mult=0; 
+      return;
     }
     applyHolderTier(u, snapshot[u.wallet] ?? 0);
   });
@@ -232,9 +268,7 @@ function importUsersFile(){
   reader.onload = e => {
     try {
       const imported = JSON.parse(e.target.result);
-      if (!Array.isArray(imported)) {
-        return alert("Invalid file format");
-      }
+      if (!Array.isArray(imported)) return alert("Invalid file format");
       users = imported;
       saveStorage();
       render();
@@ -284,12 +318,6 @@ function leaderboard(){
   leaderboardEl.textContent = out.trim();
 }
 
-// ================= 🔒 SAFETY HOOK =================
-function forceLeaderboardRefresh(){
-  if (!leaderboardEl) return;
-  leaderboard();
-}
-
 // ================= RENDER =================
 function render(){
   if (!userTableBody) return;
@@ -327,6 +355,17 @@ function render(){
   });
 
   leaderboard();
+
+  const summary = calculateNextPayoutSummary();
+  const payoutEl = document.getElementById("payoutSummary");
+  if (payoutEl){
+    payoutEl.innerHTML = `
+      💰 Total: $${summary.total.toFixed(2)}
+      | 👥 Eligible: ${summary.eligibleCount}
+      | 🚫 No Wallet: ${summary.skippedNoWallet}
+      | ⛔ < $5: ${summary.skippedMin}
+    `;
+  }
 }
 
 // ================= EXPOSE =================
@@ -361,7 +400,4 @@ document.addEventListener("DOMContentLoaded",()=>{
     document.getElementById("adminPanel").style.display="block";
     render();
   }
-
-  // ✅ exakt återställning av gammalt leaderboard-beteende
-  forceLeaderboardRefresh();
 });
